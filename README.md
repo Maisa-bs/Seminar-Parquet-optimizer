@@ -73,6 +73,16 @@ Commands:
 
 Running `python configure.py COMMAND --help` will display its description.
 
+The Parquet readers that are supported are the follwing: 
+* Apache Spark (Spark)
+* Apache Drill (Drill)
+* DuckDB (DuckDb.py)
+
+Formatting options: 
+* compression: none, snappy, gzip, zstd
+* encoding: plain, rle, rle_dictionary
+* blockSize 
+* PageSize
 
 
 ## Getting Started
