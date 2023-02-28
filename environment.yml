@@ -1,4 +1,4 @@
-name: parquet_test
+name: parquet
 channels:
   - anaconda
   - conda-forge

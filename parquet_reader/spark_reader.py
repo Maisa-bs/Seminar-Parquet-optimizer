@@ -64,8 +64,6 @@ class Spark:
 		query_tables = QUERY_DICT[query_index]
 
 		query = self._queries[query_index - 1]
-		if query_index == 1:
-			self.process(query, pathdir, query_tables)
 
 		for i in range(5):
 			query_time += self.process(query, pathdir, query_tables)
@@ -74,10 +72,3 @@ class Spark:
 		return query_time / 5
 		
 
-'''
-spark = Spark()
-time = spark.process_query('select count(*) from duplicates where age>=20', './output_data_duplicates/encoding/plain/duplicates/', 'duplicates')
-
-print(time)
-
-'''

@@ -7,6 +7,7 @@ class ParquetWriter:
 	def __init__(self):
 		self._spark = SparkSession.builder.getOrCreate()
 
+	# read a CSV file using Spark and return a DataFrame
 	def read_csvFile(self, file_path,header):
 		# Scheme is automatically inferred 
 		df = self._spark.read.format('csv') \
@@ -19,22 +20,23 @@ class ParquetWriter:
 
 		return df
 
-
+	# write a DataFrame to Parquet with a given option key and value
 	def configure_option(self, df, path, table_name, option_key,option_value):
 		 df.write.mode("overwrite") \
 		 	.option(option_key, option_value) \
 			.parquet(f"{path}/{option_key}/{option_value}/{table_name}")
 
-
+	# write a DataFrame to Parquet with multiple option values for a given option key
 	def configure_bulk_options(self,df, path, table_name, option_key, option_values): 
 		for option in option_values: 
 			self.configure_option(df, path, table_name, option_key,option)  
 
-
+	# read a CSV file, write it to Parquet with a given option key and value
 	def write_parquet(self, csv_path, output_path, option_key,option_value, table_name): 
 		df = self.read_csvFile(csv_path, 'true')
 		self.configure_option(df, output_path, table_name, option_key,option_value)
 
+	# read multiple CSV files from the TPC-H benchmark, write them to Parquet with multiple option values for a given option key
 	def write_tpch_parquet(self, input_path, output_path, option_key, option_values): 
 		path_customer = f"{input_path}/customer.tbl"
 		path_lineitem = f"{input_path}/lineitem.tbl"
@@ -44,7 +46,8 @@ class ParquetWriter:
 		path_partsupp = f"{input_path}/partsupp.tbl"
 		path_region = f"{input_path}/region.tbl"
 		path_supplier = f"{input_path}/supplier.tbl"
-
+		
+		# read each CSV file into a DataFrame
 		df_customer = self.read_csvFile(path_customer, 'false')
 		df_lineitem = self.read_csvFile(path_lineitem, 'false')
 		df_nation = self.read_csvFile(path_nation, 'false')
@@ -54,7 +57,7 @@ class ParquetWriter:
 		df_region = self.read_csvFile(path_region, 'false')
 		df_supplier = self.read_csvFile(path_supplier, 'false')
 
-
+		# rename the columns of each DataFrame (specific to the TPC-H benchmark)
 		df_customer = self.rename_columns_tpch_customer(df_customer)
 		df_lineitem = self.rename_columns_tpch_lineitem(df_lineitem)
 		df_nation = self.rename_columns_tpch_nation(df_nation)
@@ -63,7 +66,6 @@ class ParquetWriter:
 		df_partsupp = self.rename_columns_tpch_partsupp(df_partsupp)
 		df_region = self.rename_columns_tpch_region(df_region)
 		df_supplier = self.rename_columns_tpch_supplier(df_supplier)
-
 
 		self.configure_bulk_options(df_customer, output_path, "customer", option_key, option_values )
 		self.configure_bulk_options(df_lineitem, output_path, "lineitem", option_key, option_values )
@@ -160,6 +162,3 @@ class ParquetWriter:
 			.withColumnRenamed("_c4", "S_PHONE") \
 			.withColumnRenamed("_c5", "S_ACCTBAL") \
 			.withColumnRenamed("_c6", "S_COMMENT")
-		
-
-

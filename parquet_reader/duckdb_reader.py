@@ -55,12 +55,3 @@ class DuckDb:
 
 
 		return query_time / 5
-
-
-'''
-duckdb = DuckDb()
-time = duckdb.process_query("select count(*) from './output_data_duplicates/encoding/plain/duplicates/*.parquet' where age>=20")
-
-print(time)
-
-'''
