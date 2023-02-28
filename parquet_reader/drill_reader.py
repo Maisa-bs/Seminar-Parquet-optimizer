@@ -4,9 +4,6 @@ from pandas import *
 import time
 from queries import get_queries
 
-
-
-
 class Drill:
 	def __init__(self):
 		# connect to drill api
@@ -59,12 +56,5 @@ class Drill:
 
 		return query_time / 5
 
-'''
-
-drill = Drill()
-time = drill.process_query("select count(*) from dfs.root.`./output_data_duplicates/encoding/rle_dictionary/duplicates` where age>=20")
-
-print(time)
-'''
 
 	  
